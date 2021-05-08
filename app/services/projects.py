@@ -1,9 +1,9 @@
 import logging
-from typing import Optional
+from typing import Optional, Union
 
 from database.repositories.participants import ParticipantsRepository
 from database.repositories.projects import ProjectsRepository
-from schemas.projects import CreateProjectRequest, ProjectInterface
+from schemas.projects import CreateProjectRequest, ProjectInterface, ProjectsListInterface
 from utils.exceptions import ProjectNotCreatedException, ProjectNotFoundException
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ class ProjectService:
         project = self.project_repository.update(project_id=project_id, data=data)
         return project
 
-    def list(self):
+    def list(self) -> Union[list, ProjectsListInterface]:
         projects = self.project_repository.list()
         for project in projects.projects:
             participants = self.participants_repository.get_participants(project_id=project.id)

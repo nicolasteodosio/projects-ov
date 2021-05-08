@@ -23,10 +23,10 @@ class ParticipantsRepository:
         return None if created_participant is None else ParticipantInterface.parse_obj(created_participant.to_dict())
 
     @db_session
-    def get_participants(self, project_id):
+    def get_participants(self, project_id: int) -> ListParticipantInterface:
         participants = select(pa for pa in Participants if pa.project.id == project_id)
         if not participants:
-            return []
+            return ListParticipantInterface(participants=None)
         return ListParticipantInterface(
             participants=[ParticipantInterface.parse_obj(participant.to_dict()) for participant in participants]
         )

@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from pydantic import BaseModel
+from schemas.participants import ParticipantInterface
 
 
 class CreateProjectRequest(BaseModel):
@@ -17,8 +18,8 @@ class UpdateProjectRequest(BaseModel):
 class ProjectInterface(BaseModel):
     id: int
     name: str
-    owner: Optional[int]
-    participants: Optional[int]
+    owner: Optional[ParticipantInterface]
+    participants: Optional[List[ParticipantInterface]]
     state: str
     progress: float
     created_at: datetime
@@ -30,4 +31,4 @@ class AssignParticipantRequest(BaseModel):
 
 
 class ProjectsListInterface(BaseModel):
-    projects: List[ProjectInterface]
+    projects: Optional[List[ProjectInterface]]

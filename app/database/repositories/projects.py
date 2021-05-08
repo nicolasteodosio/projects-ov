@@ -33,10 +33,10 @@ class ProjectsRepository:
         return ProjectInterface.parse_obj(project.to_dict())
 
     @db_session
-    def list(self):
+    def list(self) -> ProjectsListInterface:
         projects = select(poj for poj in Projects)
         if not projects:
-            return []
+            return ProjectsListInterface(projects=None)
         return ProjectsListInterface(projects=[ProjectInterface.parse_obj(project.to_dict()) for project in projects])
 
     @db_session
