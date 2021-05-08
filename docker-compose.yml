@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  database:
+    image: mariadb
+    restart: always
+    volumes:
+      - data_mariadb:/var/lib/mariadb/data
+    environment:
+      MYSQL_USER: "projects_ov"
+      MYSQL_PASSWORD: "projects_ov"
+      MYSQL_DATABASE: "projects_ov"
+      MYSQL_ROOT_PASSWORD: "example"
+    ports:
+      - "3306:3306"
+
+
+volumes:
+  data_mariadb:
+    driver: local
