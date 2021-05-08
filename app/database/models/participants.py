@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from database.db_connection import db
-from pony.orm import PrimaryKey, Required, Set
+from pony.orm import PrimaryKey, Required
 
 
 class Participants(db.Entity):
@@ -11,4 +11,4 @@ class Participants(db.Entity):
     department = Required(str)
     is_owner = Required(bool)
     created_at = Required(datetime)
-    project = Set("Projects")
+    project = Required("Projects")
