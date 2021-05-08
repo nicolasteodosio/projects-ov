@@ -50,7 +50,8 @@ class ProjectService:
         projects = self.project_repository.list()
         for project in projects.projects:
             participants = self.participants_repository.get_participants(project_id=project.id)
-            find_owner = list(filter(lambda p: p.is_owner is True, participants.participants))
-            project.owner = find_owner[0] if find_owner else None
-            project.participants = list(filter(lambda p: p.is_owner is False, participants.participants))
+            if participants:
+                find_owner = list(filter(lambda p: p.is_owner is True, participants.participants))
+                project.owner = find_owner[0] if find_owner else None
+                project.participants = list(filter(lambda p: p.is_owner is False, participants.participants))
         return projects
