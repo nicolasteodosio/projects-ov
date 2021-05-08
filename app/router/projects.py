@@ -36,8 +36,16 @@ class ProjectView:
             )
 
     @router.get("/list", status_code=status.HTTP_200_OK)
-    def list(self, data: CreateProjectRequest):
-        pass
+    def list(self):
+        try:
+            projects = self.projects_service.list()
+            return JSONResponse(content=jsonable_encoder(projects), status_code=status.HTTP_200_OK)
+        except Exception as ex:
+            logger.error(f"Unknown error, ex: {ex}")
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"title": "Error", "message": f"An unknown error occurred ex: {ex}"},
+            )
 
     @router.put("/{project_id}", status_code=status.HTTP_202_ACCEPTED)
     def update(self, project_id: int, data: UpdateProjectRequest):

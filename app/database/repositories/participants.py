@@ -2,9 +2,9 @@ from datetime import datetime
 from typing import Optional
 
 from database import Participants, Projects
-from pony.orm import commit, db_session
+from pony.orm import commit, db_session, select
 from schemas.employees import EmployeeData
-from schemas.participants import ParticipantInterface
+from schemas.participants import ListParticipantInterface, ParticipantInterface
 from schemas.projects import ProjectInterface
 
 
@@ -21,3 +21,12 @@ class ParticipantsRepository:
         )
         commit()
         return None if created_participant is None else ParticipantInterface.parse_obj(created_participant.to_dict())
+
+    @db_session
+    def get_participants(self, project_id):
+        participants = select(pa for pa in Participants if pa.project.filter(lambda poj: poj.id == project_id))
+        if not participants:
+            return []
+        return ListParticipantInterface(
+            participants=[ParticipantInterface.parse_obj(participant.to_dict()) for participant in participants]
+        )

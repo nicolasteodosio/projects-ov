@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-from database import Projects
+from database.repositories.participants import ParticipantsRepository
 from database.repositories.projects import ProjectsRepository
 from schemas.projects import CreateProjectRequest, ProjectInterface
 from utils.exceptions import ProjectNotCreatedException, ProjectNotFoundException
@@ -14,10 +14,12 @@ class ProjectService:
         self,
         *,
         project_repository: Optional[ProjectsRepository] = None,
+        participants_repository: Optional[ParticipantsRepository] = None,
     ):
         self.project_repository = project_repository or ProjectsRepository()
+        self.participants_repository = participants_repository or ParticipantsRepository()
 
-    def get(self, project_id: int) -> Optional[Projects]:
+    def get(self, project_id: int) -> Optional[ProjectInterface]:
 
         project = self.project_repository.get(project_id=project_id)
 
@@ -43,3 +45,12 @@ class ProjectService:
         data.update(filtered)
         project = self.project_repository.update(project_id=project_id, data=data)
         return project
+
+    def list(self):
+        projects = self.project_repository.list()
+        for project in projects.projects:
+            participants = self.participants_repository.get_participants(project_id=project.id)
+            find_owner = list(filter(lambda p: p.is_owner is True, participants.participants))
+            project.owner = find_owner[0] if find_owner else None
+            project.participants = list(filter(lambda p: p.is_owner is False, participants.participants))
+        return projects

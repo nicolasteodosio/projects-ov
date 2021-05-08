@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -27,3 +27,7 @@ class ProjectInterface(BaseModel):
 class AssignParticipantRequest(BaseModel):
     department: str
     is_owner: bool
+
+
+class ProjectsListInterface(BaseModel):
+    projects: List[ProjectInterface]

@@ -3,7 +3,7 @@ from typing import Optional
 
 from database import Projects
 from pony.orm import commit, db_session, select
-from schemas.projects import CreateProjectRequest, ProjectInterface
+from schemas.projects import CreateProjectRequest, ProjectInterface, ProjectsListInterface
 from utils.enums import ProjectStatus
 
 
@@ -31,3 +31,10 @@ class ProjectsRepository:
         project = select(proj for proj in Projects if proj.id == project_id).first()
         project.set(**data)
         return ProjectInterface.parse_obj(project.to_dict())
+
+    @db_session
+    def list(self):
+        projects = select(poj for poj in Projects)
+        if not projects:
+            return []
+        return ProjectsListInterface(projects=[ProjectInterface.parse_obj(project.to_dict()) for project in projects])

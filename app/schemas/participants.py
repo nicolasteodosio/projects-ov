@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 
 from pydantic import BaseModel
 
@@ -10,3 +11,7 @@ class ParticipantInterface(BaseModel):
     department: str
     is_owner: bool
     created_at: datetime
+
+
+class ListParticipantInterface(BaseModel):
+    participants: List[ParticipantInterface]
