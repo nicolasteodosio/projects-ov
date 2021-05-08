@@ -12,3 +12,15 @@ class ProjectNotCreatedException(Exception):
 
 class ProjectNotFoundException(Exception):
     pass
+
+
+class AssignEmployeeException(Exception):
+    pass
+
+
+class OwnerAlreadyExistsException(Exception):
+    pass
+
+
+class DifferentDepartmentException(Exception):
+    pass
