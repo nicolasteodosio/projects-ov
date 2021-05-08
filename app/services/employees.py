@@ -1,7 +1,7 @@
-import os
 from typing import Optional
 
 import requests
+from config import EMPLOYEES_API
 from schemas.employees import EmployeeData
 from starlette import status
 from utils.exceptions import EmployeesApiException, EmployeesNotFoundException
@@ -9,7 +9,7 @@ from utils.exceptions import EmployeesApiException, EmployeesNotFoundException
 
 class EmployeesService:
     def __init__(self):
-        self.url = os.getenv("EMPLOYEES_API")
+        self.url = EMPLOYEES_API
 
     def get(self, is_owner: bool, department: str) -> Optional[EmployeeData]:
         response = requests.get(self.url)
