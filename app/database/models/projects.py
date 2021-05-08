@@ -11,4 +11,3 @@ class Projects(db.Entity):
     participants = Set("Participants")
     progress = Optional(float)
     created_at = Required(datetime)
-    updated_at = Optional(datetime)
