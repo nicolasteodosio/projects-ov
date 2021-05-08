@@ -4,6 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+fastapi = "*"
+fastapi-utils = "*"
+pony = "*"
+pymysql = "*"
+nicelog = "*"
+uvicorn = "*"
+requests = "*"
 
 [dev-packages]
 pre-commit = "*"
