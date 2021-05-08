@@ -17,6 +17,11 @@ pre-commit = "*"
 black = "*"
 flake8 = "*"
 isort = "*"
+pytest = "*"
+pytest-mock = "*"
+requests-mock = "*"
+pytest-env = "*"
+freezegun = "*"
 
 [requires]
 python_version = "3.9"
