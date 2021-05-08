@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from database import Projects
-from pony.orm import commit, db_session, select
+from pony.orm import commit, db_session, exists, select
 from schemas.projects import CreateProjectRequest, ProjectInterface, ProjectsListInterface
 from utils.enums import ProjectStatus
 
@@ -38,3 +38,15 @@ class ProjectsRepository:
         if not projects:
             return []
         return ProjectsListInterface(projects=[ProjectInterface.parse_obj(project.to_dict()) for project in projects])
+
+    @db_session
+    def check_owner(self) -> bool:
+        owner_exists = exists(proj for proj in Projects if proj.participants.filter(lambda p: p.is_owner is True))
+        return owner_exists
+
+    @db_session
+    def check_department(self, department: str) -> bool:
+        same_department = exists(
+            proj for proj in Projects if proj.participants.filter(lambda p: p.department == department)
+        )
+        return same_department
