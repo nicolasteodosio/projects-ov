@@ -24,7 +24,7 @@ class ParticipantsRepository:
 
     @db_session
     def get_participants(self, project_id):
-        participants = select(pa for pa in Participants if pa.project.filter(lambda poj: poj.id == project_id))
+        participants = select(pa for pa in Participants if pa.project.id == project_id)
         if not participants:
             return []
         return ListParticipantInterface(
