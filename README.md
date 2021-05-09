@@ -36,3 +36,7 @@
 * Add the project to a [SonarQube](https://www.sonarqube.org/) or [Codacy](https://www.codacy.com/), to track code smells, bugs etc.
 * Make all the code works with with async views to check if response would be better
 * Improve the logging for the application
+* The handling of the participants of a project could be better
+* Create e2e tests
+* Improve the swagger docs
+
