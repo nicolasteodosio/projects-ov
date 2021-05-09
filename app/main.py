@@ -8,7 +8,7 @@ API_VERSION = "v1"
 application = FastAPI()
 application.router.redirect_slashes = True
 
-application.include_router(project_router, prefix=f"/{API_VERSION}/projects", tags=["orders"], dependencies=[])
+application.include_router(project_router, prefix=f"/{API_VERSION}/projects", tags=["projects"], dependencies=[])
 
 
 @application.on_event("startup")
