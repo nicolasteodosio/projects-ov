@@ -9,7 +9,15 @@ from services.participants import ParticipantsService
 from services.projects import ProjectService
 from starlette import status
 from starlette.responses import JSONResponse
-from utils.exceptions import ProjectNotFoundException
+from utils.exceptions import (
+    AssignEmployeeException,
+    DifferentDepartmentException,
+    EmployeesApiException,
+    EmployeesNotFoundException,
+    OwnerAlreadyExistsException,
+    ProjectNotCreatedException,
+    ProjectNotFoundException,
+)
 
 router = InferringRouter()
 logger = logging.Logger(__name__)
@@ -28,6 +36,13 @@ class ProjectView:
             created_project = self.projects_service.create(data)
             if created_project:
                 return JSONResponse(content=jsonable_encoder(created_project), status_code=status.HTTP_201_CREATED)
+
+        except ProjectNotCreatedException as ex:
+            logger.error(f"Unknown error, ex: {ex}")
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"title": "Error", "message": f"Could not create project ex: {ex}"},
+            )
         except Exception as ex:
             logger.error(f"Unknown error, ex: {ex}")
             return JSONResponse(
@@ -62,6 +77,13 @@ class ProjectView:
                 content={"title": "Error", "message": f"Project id={project_id} not found"},
             )
 
+        except Exception as ex:
+            logger.error(f"Unknown error, ex: {ex}")
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"title": "Error", "message": f"An unknown error occurred ex: {ex}"},
+            )
+
     @router.post("/assign/{project_id}", status_code=status.HTTP_201_CREATED)
     def assign(self, project_id: int, data: AssignParticipantRequest):
         try:
@@ -86,6 +108,41 @@ class ProjectView:
                 status_code=status.HTTP_404_NOT_FOUND,
                 content={"title": "Error", "message": f"Project id={project_id} not found"},
             )
+
+        except EmployeesApiException as ex:
+            logger.error(f"Employees Api error, ex: {ex}")
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"title": "Error", "message": "Employees Api error"},
+            )
+        except EmployeesNotFoundException as ex:
+            logger.error(f"Employees not found with the parameters, ex: {ex}")
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"title": "Error", "message": "Employees not found with the parameters"},
+            )
+
+        except OwnerAlreadyExistsException as ex:
+            logger.error(f"Project already has an owner, ex: {ex}")
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"title": "Error", "message": "Project already has an owner"},
+            )
+
+        except DifferentDepartmentException as ex:
+            logger.error(f"Project has different department, ex: {ex}")
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"title": "Error", "message": "Project has different department"},
+            )
+
+        except AssignEmployeeException as ex:
+            logger.error(f"Error when assign employee, ex: {ex}")
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"title": "Error", "message": "Error when assign employee"},
+            )
+
         except Exception as ex:
             logger.error(f"Unknown error, ex: {ex}")
             return JSONResponse(
