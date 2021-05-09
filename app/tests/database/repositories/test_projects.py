@@ -79,7 +79,7 @@ def test_list():
 def test_list_none():
     repo = ProjectsRepository()
     result = repo.list()
-    assert result == []
+    assert result == ProjectsListInterface(projects=None)
 
 
 @db_session

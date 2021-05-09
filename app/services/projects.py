@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Union
+from typing import Optional
 
 from database.repositories.participants import ParticipantsRepository
 from database.repositories.projects import ProjectsRepository
@@ -46,7 +46,7 @@ class ProjectService:
         project = self.project_repository.update(project_id=project_id, data=data)
         return project
 
-    def list(self) -> Union[list, ProjectsListInterface]:
+    def list(self) -> ProjectsListInterface:
         projects = self.project_repository.list()
         for project in projects.projects:
             participants = self.participants_repository.get_participants(project_id=project.id)

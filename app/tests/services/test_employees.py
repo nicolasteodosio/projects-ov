@@ -29,7 +29,7 @@ def test_get_employee_not_found(requests_mock):
         },
     )
     service = EmployeesService()
-    with pytest.raises(EmployeesApiException):
+    with pytest.raises(EmployeesNotFoundException):
         service.get(is_owner=True, department="test")
 
 

@@ -43,7 +43,7 @@ def test_assign_employee_to_project_diff_department(mocker):
         id="test",
         fullname="test",
         department="test",
-        is_owner=True,
+        is_owner=False,
     )
     project = ProjectInterface.parse_obj(pj.to_dict())
 

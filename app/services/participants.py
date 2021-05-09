@@ -15,14 +15,13 @@ class ParticipantsService:
             exists = self.project_repository.check_owner()
             if exists:
                 raise OwnerAlreadyExistsException
+        else:
+            match_department = self.project_repository.check_department(employee.department)
+            if not match_department:
+                raise DifferentDepartmentException
 
-        match_department = self.project_repository.check_department(employee.department)
-        if match_department:
+        assigned_employee = self.repository.create(project, employee)
+        if assigned_employee is None:
+            raise AssignEmployeeException
 
-            assigned_employee = self.repository.create(project, employee)
-            if assigned_employee is None:
-                raise AssignEmployeeException
-
-            return assigned_employee
-
-        raise DifferentDepartmentException
+        return assigned_employee

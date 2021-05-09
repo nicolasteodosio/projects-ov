@@ -22,6 +22,7 @@ pytest-mock = "*"
 requests-mock = "*"
 pytest-env = "*"
 freezegun = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.9"

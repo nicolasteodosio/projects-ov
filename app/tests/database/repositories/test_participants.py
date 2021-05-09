@@ -53,4 +53,4 @@ def test_get_participants_empty():
     repo = ParticipantsRepository()
     result = repo.get_participants(project_id=pj.id)
 
-    assert result == []
+    assert result == ListParticipantInterface(participants=None)

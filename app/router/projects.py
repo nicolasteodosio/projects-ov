@@ -3,7 +3,13 @@ import logging
 from fastapi.encoders import jsonable_encoder
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
-from schemas.projects import AssignParticipantRequest, CreateProjectRequest, UpdateProjectRequest
+from schemas.projects import (
+    AssignParticipantRequest,
+    CreateProjectRequest,
+    ProjectInterface,
+    ProjectsListInterface,
+    UpdateProjectRequest,
+)
 from services.employees import EmployeesService
 from services.participants import ParticipantsService
 from services.projects import ProjectService
@@ -30,7 +36,7 @@ class ProjectView:
         self.employees_service = employees_service or EmployeesService()
         self.participants_service = participants_service or ParticipantsService()
 
-    @router.post("/create", status_code=status.HTTP_201_CREATED)
+    @router.post("/create", status_code=status.HTTP_201_CREATED, response_model=ProjectInterface)
     def create(self, data: CreateProjectRequest):
         try:
             created_project = self.projects_service.create(data)
@@ -50,7 +56,7 @@ class ProjectView:
                 content={"title": "Error", "message": f"An unknown error occurred ex: {ex}"},
             )
 
-    @router.get("/list", status_code=status.HTTP_200_OK)
+    @router.get("/list", status_code=status.HTTP_200_OK, response_model=ProjectsListInterface)
     def list(self):
         try:
             projects = self.projects_service.list()
@@ -84,7 +90,10 @@ class ProjectView:
                 content={"title": "Error", "message": f"An unknown error occurred ex: {ex}"},
             )
 
-    @router.post("/assign/{project_id}", status_code=status.HTTP_201_CREATED)
+    @router.post(
+        "/assign/{project_id}",
+        status_code=status.HTTP_201_CREATED,
+    )
     def assign(self, project_id: int, data: AssignParticipantRequest):
         try:
             project = self.projects_service.get(project_id)
